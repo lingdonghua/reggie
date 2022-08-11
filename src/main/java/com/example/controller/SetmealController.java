@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -34,11 +37,13 @@ public class SetmealController {
     @Autowired
     private SetmealDishService setmealDishService;
 
+
     /**
      *  新增套餐
      * @param setmealDto
      * @return
      */
+    @CacheEvict(value = "setmealCache",key = "#setmealDto.categoryId+'_'+#setmealDto.status")//删除指定key的缓存数据
     @PostMapping
     public R<String> saveBySetmeal(@RequestBody SetmealDto setmealDto){
         log.info("套餐的dto为："+setmealDto.toString());
@@ -86,6 +91,7 @@ public class SetmealController {
      * @param ids
      * @return
      */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @PostMapping("/status/{status}")
     public R<String> updateStatus(@PathVariable Integer status,Long[] ids){
         for (Long id : ids) {
@@ -100,6 +106,7 @@ public class SetmealController {
      * @param ids
      * @return
      */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @DeleteMapping
     public R<String> delete(Long[] ids){
         log.info("删除的Id"+ids[0].toString());
@@ -125,6 +132,7 @@ public class SetmealController {
      * 修改
      * @param setmealDto
      */
+    @CacheEvict(value = "setmealCache",key = "#setmealDto.categoryId+'_'+#setmealDto.status")
     @PutMapping
     public R<String> update(@RequestBody SetmealDto setmealDto){
         log.info("接收到的Dto类为："+setmealDto.toString());
@@ -138,6 +146,7 @@ public class SetmealController {
      * @param status
      * @return
      */
+    @Cacheable(value = "setmealCache",key = "#categoryId+'_'+#status")
     @GetMapping("/list")
     public R<List<SetmealDto>> getSetmeal(String categoryId,Integer status){
         //首先查setmeal中关联的套餐

@@ -9,6 +9,19 @@ spring:
     username: root
     password: password
     type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 127.0.0.1 #本地
+    port: 6379
+    database: 0  #存放在几号数据库，默认0号
+    jedis:
+      pool:    #redis连接池
+        max-active: 8
+        max-wait: 1ms
+        max-idle: 8
+        min-idle: 0
+  cache:
+    redis:
+      time-to-live: 1800000 #设置缓存存活时间
   #
 #  jackson:
 #    generator:
@@ -22,4 +35,4 @@ mybatis-plus:
     db-config:
       id-type: ASSIGN_ID
 file:
-  path: D:\img\
+  path: D:\img\   #照片存放路劲
