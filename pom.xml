@@ -67,7 +67,7 @@
             <artifactId>commons-email</artifactId>
             <version>1.5</version>
         </dependency>
-        <!--阿里云短信服务-->
+        <!--阿里云短信服务 用不到，注册太麻烦，要企业编号-->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>aliyun-java-sdk-core</artifactId>
